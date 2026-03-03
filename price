@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Crypto Price Tracker</title>
+</head>
+<body>
+
+<h1>Real-Time Cryptocurrency Prices</h1>
+
+<table border="1">
+    <tr>
+        <th>Coin</th>
+        <th>Price (USD)</th>
+    </tr>
+    <tr>
+        <td>Bitcoin</td>
+        <td id="btc">Loading...</td>
+    </tr>
+    <tr>
+        <td>Ethereum</td>
+        <td id="eth">Loading...</td>
+    </tr>
+</table>
+
+<p>Updated every 10 seconds</p>
+
+<script>
+async function fetchPrices() {
+    try {
+        const response = await fetch(
+            "https://api.allorigins.win/get?url=" + 
+            encodeURIComponent("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd")
+        );
+
+        const proxyData = await response.json();
+        const data = JSON.parse(proxyData.contents);
+
+        document.getElementById("btc").innerText = data.bitcoin.usd;
+        document.getElementById("eth").innerText = data.ethereum.usd;
+
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+fetchPrices();
+setInterval(fetchPrices, 10000);
+</script>
+
+</body>
+</html>
